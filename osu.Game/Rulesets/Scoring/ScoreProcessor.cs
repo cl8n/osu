@@ -22,6 +22,7 @@ namespace osu.Game.Rulesets.Scoring
     public partial class ScoreProcessor : JudgementProcessor
     {
         public const double MAX_SCORE = 1000000;
+        public const long REVERSE_ORDERING_SCORE_OFFSET = (1 << 24) - 1;
 
         private const double accuracy_cutoff_x = 1;
         private const double accuracy_cutoff_s = 0.95;
@@ -312,7 +313,12 @@ namespace osu.Game.Rulesets.Scoring
             double comboProgress = maximumComboPortion > 0 ? currentComboPortion / maximumComboPortion : 1;
             double accuracyProcess = maximumAccuracyJudgementCount > 0 ? (double)currentAccuracyJudgementCount / maximumAccuracyJudgementCount : 1;
 
-            TotalScore.Value = (long)Math.Round(ComputeTotalScore(comboProgress, accuracyProcess, currentBonusPortion) * scoreMultiplier);
+            long score = (long)Math.Round(ComputeTotalScore(comboProgress, accuracyProcess, currentBonusPortion) * scoreMultiplier);
+
+            if (Mods.Value.Any(mod => mod is IReversesScoreOrdering))
+                score = -score + REVERSE_ORDERING_SCORE_OFFSET;
+
+            TotalScore.Value = score;
         }
 
         protected virtual double ComputeTotalScore(double comboProgress, double accuracyProgress, double bonusPortion)
@@ -357,7 +363,9 @@ namespace osu.Game.Rulesets.Scoring
             currentComboPortion = 0;
             currentBonusPortion = 0;
 
-            TotalScore.Value = 0;
+            TotalScore.Value = Mods.Value.Any(mod => mod is IReversesScoreOrdering)
+                ? REVERSE_ORDERING_SCORE_OFFSET
+                : 0;
             Accuracy.Value = 1;
             Combo.Value = 0;
             Rank.Disabled = false;

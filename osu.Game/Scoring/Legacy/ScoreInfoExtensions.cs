@@ -4,6 +4,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using osu.Game.Rulesets.Mods;
 using osu.Game.Rulesets.Scoring;
 
 namespace osu.Game.Scoring.Legacy
@@ -11,13 +12,16 @@ namespace osu.Game.Scoring.Legacy
     public static class ScoreInfoExtensions
     {
         public static long GetDisplayScore(this ScoreProcessor scoreProcessor, ScoringMode mode)
-            => getDisplayScore(scoreProcessor.Ruleset.RulesetInfo.OnlineID, scoreProcessor.TotalScore.Value, mode, scoreProcessor.MaximumStatistics);
+            => getDisplayScore(scoreProcessor.Ruleset.RulesetInfo.OnlineID, scoreProcessor.Mods.Value, scoreProcessor.TotalScore.Value, mode, scoreProcessor.MaximumStatistics);
 
         public static long GetDisplayScore(this ScoreInfo scoreInfo, ScoringMode mode)
-            => getDisplayScore(scoreInfo.Ruleset.OnlineID, scoreInfo.TotalScore, mode, scoreInfo.MaximumStatistics);
+            => getDisplayScore(scoreInfo.Ruleset.OnlineID, scoreInfo.Mods, scoreInfo.TotalScore, mode, scoreInfo.MaximumStatistics);
 
-        private static long getDisplayScore(int rulesetId, long score, ScoringMode mode, IReadOnlyDictionary<HitResult, int> maximumStatistics)
+        private static long getDisplayScore(int rulesetId, IReadOnlyList<Mod> mods, long score, ScoringMode mode, IReadOnlyDictionary<HitResult, int> maximumStatistics)
         {
+            if (mods.Any(mod => mod is IReversesScoreOrdering))
+                score = -score + ScoreProcessor.REVERSE_ORDERING_SCORE_OFFSET;
+
             if (mode == ScoringMode.Standardised)
                 return score;
 

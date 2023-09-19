@@ -21,6 +21,8 @@ namespace osu.Game.Rulesets.Scoring
         /// </summary>
         public event Func<HealthProcessor, JudgementResult, bool>? FailConditions;
 
+        public event Action<JudgementResult>? AdjustJudgementResult;
+
         /// <summary>
         /// The current health.
         /// </summary>
@@ -48,15 +50,23 @@ namespace osu.Game.Rulesets.Scoring
             if (HasFailed)
                 return;
 
+            AdjustJudgementResult?.Invoke(result);
+
             Health.Value += GetHealthIncreaseFor(result);
 
             if (meetsAnyFailCondition(result))
                 TriggerFailure();
+
+            AdjustJudgementResult?.Invoke(result);
         }
 
         protected override void RevertResultInternal(JudgementResult result)
         {
+            AdjustJudgementResult?.Invoke(result);
+
             Health.Value = result.HealthAtJudgement;
+
+            AdjustJudgementResult?.Invoke(result);
 
             // Todo: Revert HasFailed state with proper player support
         }
