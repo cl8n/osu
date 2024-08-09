@@ -94,6 +94,9 @@ namespace osu.Game.Rulesets.Mods
                         tooltipTexts.Add($"{attr.Label}: {valueText}");
                 }
 
+                if (this is IHasVersion modWithVersion)
+                    tooltipTexts.Add(modWithVersion.VersionDescription.ToString());
+
                 return string.Join(", ", tooltipTexts.Where(s => !string.IsNullOrEmpty(s)));
             }
         }

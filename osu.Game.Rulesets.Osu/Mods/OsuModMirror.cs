@@ -12,7 +12,7 @@ using osu.Game.Rulesets.Osu.Utils;
 
 namespace osu.Game.Rulesets.Osu.Mods
 {
-    public class OsuModMirror : ModMirror, IApplicableToHitObject
+    public class OsuModMirror : ModMirror, IApplicableToHitObject, IHasVersion
     {
         public override LocalisableString Description => "Flip objects on the chosen axes.";
         public override Type[] IncompatibleMods => new[] { typeof(ModHardRock) };
@@ -40,6 +40,14 @@ namespace osu.Game.Rulesets.Osu.Mods
                     break;
             }
         }
+
+        public ushort Version { get; set; } = 1;
+
+        LocalisableString IHasVersion.VersionDescription => Version switch
+        {
+            0 => "Stacks unchanged",
+            _ => string.Empty,
+        };
 
         public enum MirrorType
         {

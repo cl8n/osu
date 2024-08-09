@@ -27,6 +27,10 @@ namespace osu.Game.Online.API
         [MessagePackFormatter(typeof(ModSettingsDictionaryFormatter))]
         public Dictionary<string, object> Settings { get; set; } = new Dictionary<string, object>();
 
+        [JsonProperty("version")]
+        [Key(2)]
+        public ushort Version { get; set; } = 0;
+
         [JsonConstructor]
         [SerializationConstructor]
         public APIMod()
@@ -44,6 +48,9 @@ namespace osu.Game.Online.API
                 if (!bindable.IsDefault)
                     Settings.Add(property.Name.ToSnakeCase(), bindable.GetUnderlyingSettingValue());
             }
+
+            if (mod is IHasVersion modWithVersion)
+                Version = modWithVersion.Version;
         }
 
         public Mod ToMod(Ruleset ruleset)
@@ -74,10 +81,14 @@ namespace osu.Game.Online.API
                 }
             }
 
+            if (resultMod is IHasVersion resultModWithVersion)
+                resultModWithVersion.Version = Version;
+
             return resultMod;
         }
 
         public bool ShouldSerializeSettings() => Settings.Count > 0;
+        public bool ShouldSerializeVersion() => Version > 0;
 
         public bool Equals(APIMod? other)
         {
