@@ -31,13 +31,21 @@ namespace osu.Game.Overlays.Mods
             Title = Mod.Name;
             Description = Mod.Description;
 
-            SwitchContainer.Child = new ModSwitchSmall(Mod)
+            // SwitchContainer.Child = new ModSwitchSmall(Mod)
+            // {
+            //     Anchor = Anchor.Centre,
+            //     Origin = Anchor.Centre,
+            //     Active = { BindTarget = Active },
+            //     Shear = new Vector2(-OsuGame.SHEAR, 0),
+            //     Scale = new Vector2(HEIGHT / ModSwitchSmall.DEFAULT_SIZE)
+            // };
+            SwitchContainer.Child = new ModIcon(Mod, showTooltip: false, showExtendedInformation: false)
             {
                 Anchor = Anchor.Centre,
                 Origin = Anchor.Centre,
-                Active = { BindTarget = Active },
+                Scale = new Vector2(HEIGHT / ModIcon.MOD_ICON_SIZE.Y),
                 Shear = new Vector2(-OsuGame.SHEAR, 0),
-                Scale = new Vector2(HEIGHT / ModSwitchSmall.DEFAULT_SIZE)
+                Active = { BindTarget = Active },
             };
         }
 

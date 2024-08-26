@@ -29,12 +29,6 @@ namespace osu.Game.Tests.Visual.UserInterface
                     ChildrenEnumerable = Ruleset.Value.CreateInstance().CreateAllMods().Select(m => new ModIcon(m)),
                 };
             });
-
-            AddStep("toggle selected", () =>
-            {
-                foreach (var icon in this.ChildrenOfType<ModIcon>())
-                    icon.Selected.Toggle();
-            });
         }
 
         [Test]

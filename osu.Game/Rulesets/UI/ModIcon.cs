@@ -4,7 +4,6 @@
 using System;
 using osu.Framework.Allocation;
 using osu.Framework.Bindables;
-using osu.Framework.Extensions.Color4Extensions;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Cursor;
@@ -15,6 +14,7 @@ using osu.Framework.Utils;
 using osu.Game.Configuration;
 using osu.Game.Graphics;
 using osu.Game.Graphics.Sprites;
+using osu.Game.Overlays;
 using osu.Game.Rulesets.Mods;
 using osuTK;
 using osuTK.Graphics;
@@ -26,7 +26,7 @@ namespace osu.Game.Rulesets.UI
     /// </summary>
     public partial class ModIcon : Container, IHasTooltip
     {
-        public readonly BindableBool Selected = new BindableBool();
+        public readonly BindableBool Active = new BindableBool(true);
 
         private SpriteIcon modIcon = null!;
         private SpriteText modAcronym = null!;
@@ -59,7 +59,8 @@ namespace osu.Game.Rulesets.UI
         [Resolved]
         private OsuColour colours { get; set; } = null!;
 
-        private Color4 backgroundColour;
+        private Color4 inactiveBackgroundColour;
+        private Color4 inactiveForegroundColour;
 
         private Sprite extendedBackground = null!;
 
@@ -87,8 +88,11 @@ namespace osu.Game.Rulesets.UI
         }
 
         [BackgroundDependencyLoader]
-        private void load(TextureStore textures)
+        private void load(OverlayColourProvider? colourProvider, TextureStore textures)
         {
+            inactiveBackgroundColour = colourProvider?.Background5 ?? colours.Gray3;
+            inactiveForegroundColour = colourProvider?.Background2 ?? colours.Gray5;
+
             Children = new Drawable[]
             {
                 extendedContent = new Container
@@ -160,7 +164,7 @@ namespace osu.Game.Rulesets.UI
         {
             base.LoadComplete();
 
-            Selected.BindValueChanged(_ => updateColour());
+            Active.BindValueChanged(_ => updateColour());
 
             updateMod(mod);
         }
@@ -189,9 +193,7 @@ namespace osu.Game.Rulesets.UI
                 modAcronym.FadeOut();
             }
 
-            backgroundColour = colours.ForModType(value.Type);
             updateColour();
-
             updateExtendedInformation();
         }
 
@@ -205,10 +207,23 @@ namespace osu.Game.Rulesets.UI
 
         private void updateColour()
         {
-            modAcronym.Colour = modIcon.Colour = Interpolation.ValueAt<Colour4>(0.1f, Colour4.Black, backgroundColour, 0, 1);
+            Colour4 backgroundColour;
+            Colour4 foregroundColour;
 
-            extendedText.Colour = background.Colour = Selected.Value ? backgroundColour.Lighten(0.2f) : backgroundColour;
-            extendedBackground.Colour = Selected.Value ? backgroundColour.Darken(2.4f) : backgroundColour.Darken(2.8f);
+            if (Active.Value)
+            {
+                backgroundColour = colours.ForModType(mod.Type);
+                foregroundColour = Interpolation.ValueAt<Colour4>(0.1f, Colour4.Black, backgroundColour, 0, 1);
+            }
+            else
+            {
+                backgroundColour = inactiveBackgroundColour;
+                foregroundColour = inactiveForegroundColour;
+            }
+
+            modAcronym.Colour = modIcon.Colour = foregroundColour;
+            background.Colour = extendedText.Colour = backgroundColour;
+            extendedBackground.Colour = backgroundColour.Darken(2.8f);
         }
 
         protected override void Dispose(bool isDisposing)

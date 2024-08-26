@@ -51,7 +51,7 @@ namespace osu.Game.Overlays.Mods
 
         protected virtual float IdleSwitchWidth => 14;
         protected virtual float ExpandedSwitchWidth => 30;
-        protected virtual Colour4 BackgroundColour => Active.Value ? AccentColour.Darken(0.3f) : ColourProvider.Background3;
+        protected virtual Colour4 BackgroundColour => Active.Value ? AccentColour.Darken(0.6f) : ColourProvider.Background3;
         protected virtual Colour4 ForegroundColour => Active.Value ? AccentColour : ColourProvider.Background2;
         protected virtual Colour4 TextColour => Active.Value ? ColourProvider.Background6 : Colour4.White;
 
