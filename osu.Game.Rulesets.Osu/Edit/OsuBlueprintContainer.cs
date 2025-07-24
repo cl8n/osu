@@ -10,6 +10,7 @@ using osu.Game.Configuration;
 using osu.Game.Rulesets.Edit;
 using osu.Game.Rulesets.Objects;
 using osu.Game.Rulesets.Osu.Edit.Blueprints.HitCircles;
+using osu.Game.Rulesets.Osu.Edit.Blueprints.Holds;
 using osu.Game.Rulesets.Osu.Edit.Blueprints.Sliders;
 using osu.Game.Rulesets.Osu.Edit.Blueprints.Spinners;
 using osu.Game.Rulesets.Osu.Objects;
@@ -49,6 +50,9 @@ namespace osu.Game.Rulesets.Osu.Edit
 
                 case Spinner spinner:
                     return new SpinnerSelectionBlueprint(spinner);
+
+                case Hold hold:
+                    return new HoldSelectionBlueprint(hold);
             }
 
             return base.CreateHitObjectBlueprintFor(hitObject);

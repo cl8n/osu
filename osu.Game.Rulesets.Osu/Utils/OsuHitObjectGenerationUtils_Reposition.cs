@@ -89,6 +89,7 @@ namespace osu.Game.Rulesets.Osu.Utils
                 switch (hitObject)
                 {
                     case HitCircle:
+                    case Hold:
                         shift = clampHitCircleToPlayfield(current);
                         break;
 

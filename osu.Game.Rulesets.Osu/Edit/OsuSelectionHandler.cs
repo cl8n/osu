@@ -282,7 +282,7 @@ namespace osu.Game.Rulesets.Osu.Edit
         /// All osu! hitobjects which can be merged.
         /// </summary>
         private OsuHitObject[] selectedMergeableObjects => SelectedItems.OfType<OsuHitObject>()
-                                                                        .Where(h => h is HitCircle or Slider)
+                                                                        .Where(h => h is HitCircle or Slider or Hold)
                                                                         .OrderBy(h => h.StartTime)
                                                                         .ToArray();
 
@@ -311,7 +311,7 @@ namespace osu.Game.Rulesets.Osu.Edit
             }
 
             // Merge all the selected hit objects into one slider path.
-            bool lastCircle = firstHitObject is HitCircle;
+            bool lastCircle = firstHitObject is HitCircle or Hold;
 
             foreach (var selectedMergeableObject in mergeableObjects.Skip(1))
             {
