@@ -27,7 +27,7 @@ namespace osu.Game.Rulesets.Osu.Edit.Checks
 
         public IEnumerable<IssueTemplate> PossibleTemplates => new IssueTemplate[]
         {
-            new IssueTemplateOffscreenCircle(this),
+            new IssueTemplateOffscreenCircleOrHold(this),
             new IssueTemplateOffscreenSlider(this)
         };
 
@@ -45,10 +45,10 @@ namespace osu.Game.Rulesets.Osu.Edit.Checks
                         break;
                     }
 
-                    case HitCircle circle:
+                    case OsuHitObject circleOrHold and (HitCircle or Hold):
                     {
-                        if (isOffscreen(circle.StackedPosition, circle.Radius))
-                            yield return new IssueTemplateOffscreenCircle(this).Create(circle);
+                        if (isOffscreen(circleOrHold.StackedPosition, circleOrHold.Radius))
+                            yield return new IssueTemplateOffscreenCircleOrHold(this).Create(circleOrHold);
 
                         break;
                     }
@@ -92,14 +92,14 @@ namespace osu.Game.Rulesets.Osu.Edit.Checks
                    position.Y - radius < min_y || position.Y + radius > max_y;
         }
 
-        public class IssueTemplateOffscreenCircle : IssueTemplate
+        public class IssueTemplateOffscreenCircleOrHold : IssueTemplate
         {
-            public IssueTemplateOffscreenCircle(ICheck check)
+            public IssueTemplateOffscreenCircleOrHold(ICheck check)
                 : base(check, IssueType.Problem, "This circle goes offscreen on a 4:3 aspect ratio.")
             {
             }
 
-            public Issue Create(HitCircle circle) => new Issue(circle, this);
+            public Issue Create(OsuHitObject circleOrHold) => new Issue(circleOrHold, this);
         }
 
         public class IssueTemplateOffscreenSlider : IssueTemplate

@@ -235,7 +235,7 @@ namespace osu.Game.Rulesets.Osu.Tests.Editor.Checks
             var issues = check.Run(context).ToList();
 
             Assert.That(issues, Has.Count.EqualTo(1));
-            Assert.That(issues.Single().Template is CheckOffscreenObjects.IssueTemplateOffscreenCircle);
+            Assert.That(issues.Single().Template is CheckOffscreenObjects.IssueTemplateOffscreenCircleOrHold);
         }
 
         private void assertOffscreenSlider(IBeatmap beatmap)
