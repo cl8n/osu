@@ -242,6 +242,9 @@ namespace osu.Game.Rulesets.Osu.Skinning.Legacy
 
                             return null;
 
+                        case OsuSkinComponents.HoldProgress:
+                            return null;
+
                         default:
                             throw new UnsupportedSkinComponentException(lookup);
                     }
