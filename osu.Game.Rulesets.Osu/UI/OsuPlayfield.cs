@@ -161,6 +161,10 @@ namespace osu.Game.Rulesets.Osu.UI
             RegisterPool<SpinnerTick, DrawableSpinnerTick>(10, 200);
             RegisterPool<SpinnerBonusTick, DrawableSpinnerBonusTick>(10, 200);
 
+            RegisterPool<Hold, DrawableHold>(10, 50);
+            RegisterPool<HoldHeadCircle, DrawableHoldHead>(10, 50);
+            RegisterPool<HoldTick, DrawableHoldTick>(20, 100);
+
             if (beatmap != null)
                 ApplyCircleSizeToPlayfieldBorder(beatmap);
         }
