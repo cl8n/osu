@@ -46,11 +46,13 @@ namespace osu.Game.Rulesets.Osu.Mods
             {
                 case DrawableSliderHead:
                 case DrawableSliderTail:
+                case DrawableHoldHead:
                     // special cases we should *not* be scaling.
                     break;
 
-                case DrawableSlider:
                 case DrawableHitCircle:
+                case DrawableSlider:
+                case DrawableHold:
                 {
                     using (drawable.BeginAbsoluteSequence(h.StartTime - h.TimePreempt))
                         drawable.ScaleTo(StartScale.Value).Then().ScaleTo(EndScale, h.TimePreempt, Easing.OutSine);

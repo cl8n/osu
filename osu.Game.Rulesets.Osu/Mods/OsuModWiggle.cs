@@ -67,7 +67,7 @@ namespace osu.Game.Rulesets.Osu.Mods
                     wiggle();
             }
 
-            // Keep wiggling sliders and spinners for their duration
+            // Keep wiggling sliders, spinners, and holds for their duration
             if (!(osuObject is IHasDuration endTime))
                 return;
 

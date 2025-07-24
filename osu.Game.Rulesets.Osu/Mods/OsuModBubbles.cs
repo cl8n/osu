@@ -86,6 +86,7 @@ namespace osu.Game.Rulesets.Osu.Mods
                 {
                     case Slider:
                     case SpinnerTick:
+                    case HoldTick:
                         break;
 
                     default:
@@ -105,7 +106,7 @@ namespace osu.Game.Rulesets.Osu.Mods
 
             drawableObject.OnRevertResult += (drawable, _) =>
             {
-                if (drawable.HitObject is SpinnerTick or Slider) return;
+                if (drawable.HitObject is HoldTick or SpinnerTick or Slider) return;
 
                 BubbleDrawable? lastBubble = bubbleContainer.OfType<BubbleDrawable>().LastOrDefault();
 

@@ -60,6 +60,8 @@ namespace osu.Game.Rulesets.Osu.Mods
                     slider.Body.OnSkinChanged += () => applySliderState(slider);
                     applySliderState(slider);
                     break;
+
+                // TODO: for hold, stylise progress piece so it's more like a ring instead of a filled circle
             }
         }
 

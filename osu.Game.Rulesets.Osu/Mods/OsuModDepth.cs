@@ -87,6 +87,10 @@ namespace osu.Game.Rulesets.Osu.Mods
                     case DrawableSlider slider:
                         processSlider(time, slider);
                         break;
+
+                    case DrawableHold hold:
+                        processHold(time, hold);
+                        break;
                 }
             }
         }
@@ -105,23 +109,29 @@ namespace osu.Game.Rulesets.Osu.Mods
             drawable.Scale = new Vector2(scale);
         }
 
-        private void processSlider(double time, DrawableSlider drawableSlider)
+        private void processHold(double time, DrawableHold drawableHold) =>
+            processHitObjectWithDuration(time, drawableHold, drawableHold.HitObject.Duration);
+
+        private void processSlider(double time, DrawableSlider drawableSlider) =>
+            processHitObjectWithDuration(time, drawableSlider, drawableSlider.HitObject.Duration);
+
+        private void processHitObjectWithDuration(double time, DrawableOsuHitObject drawable, double duration)
         {
-            var hitObject = drawableSlider.HitObject;
+            var hitObject = drawable.HitObject;
 
             double baseSpeed = MaxDepth.Value / hitObject.TimePreempt;
             double appearTime = hitObject.StartTime - hitObject.TimePreempt;
 
             // Allow slider to move at a constant speed if its scale at the end time will be lower than 1.5f
-            float zEnd = MaxDepth.Value - (float)((Math.Max(hitObject.StartTime + hitObject.Duration, appearTime) - appearTime) * baseSpeed);
+            float zEnd = MaxDepth.Value - (float)((Math.Max(hitObject.StartTime + duration, appearTime) - appearTime) * baseSpeed);
 
             if (zEnd > sliderMinDepth)
             {
-                processHitObject(time, drawableSlider);
+                processHitObject(time, drawable);
                 return;
             }
 
-            double offsetAfterStartTime = hitObject.Duration + 500;
+            double offsetAfterStartTime = duration + 500;
             double slowSpeed = Math.Min(-sliderMinDepth / offsetAfterStartTime, baseSpeed);
 
             double decelerationTime = hitObject.TimePreempt * 0.2;
@@ -147,8 +157,8 @@ namespace osu.Game.Rulesets.Osu.Mods
             }
 
             float scale = scaleForDepth(z);
-            drawableSlider.Position = toPlayfieldPosition(scale, hitObject.StackedPosition);
-            drawableSlider.Scale = new Vector2(scale);
+            drawable.Position = toPlayfieldPosition(scale, hitObject.StackedPosition);
+            drawable.Scale = new Vector2(scale);
         }
 
         private static float scaleForDepth(float depth) => -camera_position.Z / Math.Max(1f, depth - camera_position.Z);

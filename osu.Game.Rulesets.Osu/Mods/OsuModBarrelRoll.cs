@@ -25,6 +25,10 @@ namespace osu.Game.Rulesets.Osu.Mods
                     case DrawableHitCircle circle:
                         circle.CirclePiece.Rotation = -CurrentRotation;
                         break;
+
+                    case DrawableHold hold:
+                        hold.ProgressPiece.Rotation = -CurrentRotation;
+                        break;
                 }
             };
         }

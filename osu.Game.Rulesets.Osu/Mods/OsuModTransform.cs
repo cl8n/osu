@@ -38,6 +38,7 @@ namespace osu.Game.Rulesets.Osu.Mods
                 case DrawableSliderTail:
                 case DrawableSliderTick:
                 case DrawableSliderRepeat:
+                case DrawableHoldHead:
                     return;
 
                 default:

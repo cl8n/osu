@@ -66,8 +66,9 @@ namespace osu.Game.Rulesets.Osu.Mods
 
                 switch (drawable)
                 {
-                    case DrawableHitCircle circle:
-                        easeTo(playfield.Clock, circle, destination, cursorPos);
+                    case DrawableHitCircle:
+                    case DrawableHold:
+                        easeTo(playfield.Clock, drawable, destination, cursorPos);
                         break;
 
                     case DrawableSlider slider:

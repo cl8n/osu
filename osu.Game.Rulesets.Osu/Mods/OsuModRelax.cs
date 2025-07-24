@@ -107,6 +107,14 @@ namespace osu.Game.Rulesets.Osu.Mods
                     case DrawableSpinner spinner:
                         requiresHold |= spinner.HitObject.SpinsRequired > 0;
                         break;
+
+                    case DrawableHold hold:
+                        // Handles cases like "2B" beatmaps, where sliders may be overlapping and simply holding is not enough.
+                        if (!hold.HeadCircle.IsHit)
+                            handleHitCircle(hold.HeadCircle);
+
+                        requiresHold |= hold.HoldInputManager.IsMouseInFollowArea(hold.Tracking.Value);
+                        break;
                 }
             }
 
