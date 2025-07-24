@@ -1,17 +1,19 @@
 ﻿// Copyright (c) ppy Pty Ltd <contact@ppy.sh>. Licensed under the MIT Licence.
 // See the LICENCE file in the repository root for full licence text.
 
-using osuTK;
-using osu.Game.Beatmaps;
-using osu.Game.Rulesets.Objects;
-using osu.Game.Rulesets.Osu.Objects;
 using System.Collections.Generic;
-using osu.Game.Rulesets.Objects.Types;
 using System.Linq;
 using System.Threading;
-using osu.Game.Rulesets.Osu.UI;
 using osu.Framework.Extensions.IEnumerableExtensions;
+using osu.Framework.Utils;
+using osu.Game.Beatmaps;
 using osu.Game.Beatmaps.Legacy;
+using osu.Game.Rulesets.Objects;
+using osu.Game.Rulesets.Objects.Legacy;
+using osu.Game.Rulesets.Objects.Types;
+using osu.Game.Rulesets.Osu.Objects;
+using osu.Game.Rulesets.Osu.UI;
+using osuTK;
 
 namespace osu.Game.Rulesets.Osu.Beatmaps
 {
@@ -52,6 +54,35 @@ namespace osu.Game.Rulesets.Osu.Beatmaps
                     }.Yield();
 
                 case IHasDuration endTimeData:
+                    LegacyHitObjectType type = 0;
+
+                    // If the object has a legacy type of spinner or hold, use that to decide which hit object to convert to
+                    if (original is IHasLegacyHitObjectType legacyData)
+                        type = legacyData.LegacyType & (LegacyHitObjectType.Spinner | LegacyHitObjectType.Hold);
+
+                    // Otherwise, use the duration to determine the hit object (>2 beats for spinner, otherwise hold)
+                    if (type == 0)
+                    {
+                        double beatLength = beatmap.ControlPointInfo.TimingPointAt(original.StartTime).BeatLength;
+
+                        type = Precision.DefinitelyBigger(endTimeData.Duration, beatLength * 2)
+                            ? LegacyHitObjectType.Spinner
+                            : LegacyHitObjectType.Hold;
+                    }
+
+                    if (type.HasFlag(LegacyHitObjectType.Hold))
+                    {
+                        return new Hold
+                        {
+                            StartTime = original.StartTime,
+                            Samples = original.Samples,
+                            EndTime = endTimeData.EndTime,
+                            Position = positionData?.Position ?? Vector2.Zero,
+                            NewCombo = comboData?.NewCombo ?? false,
+                            ComboOffset = comboData?.ComboOffset ?? 0,
+                        }.Yield();
+                    }
+
                     return new Spinner
                     {
                         StartTime = original.StartTime,

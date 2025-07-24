@@ -8,7 +8,9 @@ using System.Threading;
 using osu.Game.Audio;
 using osu.Game.Beatmaps;
 using osu.Game.Beatmaps.ControlPoints;
+using osu.Game.Beatmaps.Legacy;
 using osu.Game.Rulesets.Judgements;
+using osu.Game.Rulesets.Objects.Legacy;
 using osu.Game.Rulesets.Objects.Types;
 using osu.Game.Rulesets.Osu.Judgements;
 using osu.Game.Rulesets.Scoring;
@@ -16,7 +18,7 @@ using osuTK;
 
 namespace osu.Game.Rulesets.Osu.Objects
 {
-    public class Spinner : OsuHitObject, IHasDuration
+    public class Spinner : OsuHitObject, IHasDuration, IHasLegacyHitObjectType
     {
         /// <summary>
         /// The RPM required to clear the spinner at ODs [ 0, 5, 10 ].
@@ -35,6 +37,9 @@ namespace osu.Game.Rulesets.Osu.Objects
         }
 
         public double Duration { get; set; }
+
+        // This is necessary to differentiate spinners and holds, because they implement the same interfaces
+        public LegacyHitObjectType LegacyType => LegacyHitObjectType.Spinner;
 
         /// <summary>
         /// Number of spins required to finish the spinner without miss.

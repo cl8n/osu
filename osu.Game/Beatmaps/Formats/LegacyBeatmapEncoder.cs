@@ -428,6 +428,10 @@ namespace osu.Game.Beatmaps.Formats
 
             switch (hitObject)
             {
+                case IHasLegacyHitObjectType legacyHitObject:
+                    type |= legacyHitObject.LegacyType & LegacyHitObjectType.ObjectTypes;
+                    break;
+
                 case IHasPath:
                     type |= LegacyHitObjectType.Slider;
                     break;
