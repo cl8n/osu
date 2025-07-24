@@ -25,6 +25,11 @@ namespace osu.Game.Localisation
         public static LocalisableString Spinners => new TranslatableString(getKey(@"spinners"), @"Spinners");
 
         /// <summary>
+        /// "Holds"
+        /// </summary>
+        public static LocalisableString Holds => new TranslatableString(getKey(@"holds"), @"Holds");
+
+        /// <summary>
         /// "Hits"
         /// </summary>
         public static LocalisableString Hits => new TranslatableString(getKey(@"hits"), @"Hits");
