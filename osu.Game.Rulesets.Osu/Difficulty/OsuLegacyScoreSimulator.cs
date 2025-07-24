@@ -8,7 +8,6 @@ using osu.Game.Beatmaps;
 using osu.Game.Rulesets.Mods;
 using osu.Game.Rulesets.Objects;
 using osu.Game.Rulesets.Objects.Legacy;
-using osu.Game.Rulesets.Objects.Types;
 using osu.Game.Rulesets.Osu.Mods;
 using osu.Game.Rulesets.Osu.Objects;
 using osu.Game.Rulesets.Osu.Scoring;
@@ -31,33 +30,10 @@ namespace osu.Game.Rulesets.Osu.Difficulty
         {
             IBeatmap baseBeatmap = workingBeatmap.Beatmap;
 
-            int countNormal = 0;
-            int countSlider = 0;
-            int countSpinner = 0;
-
-            foreach (HitObject obj in workingBeatmap.Beatmap.HitObjects)
-            {
-                switch (obj)
-                {
-                    case IHasPath:
-                        countSlider++;
-                        break;
-
-                    case IHasDuration:
-                        countSpinner++;
-                        break;
-
-                    default:
-                        countNormal++;
-                        break;
-                }
-            }
-
-            int objectCount = countNormal + countSlider + countSpinner;
-
+            int objectCount = baseBeatmap.HitObjects.Count;
             int drainLength = 0;
 
-            if (baseBeatmap.HitObjects.Count > 0)
+            if (objectCount > 0)
             {
                 int breakLength = baseBeatmap.Breaks.Select(b => (int)Math.Round(b.EndTime) - (int)Math.Round(b.StartTime)).Sum();
                 drainLength = ((int)Math.Round(baseBeatmap.HitObjects[^1].StartTime) - (int)Math.Round(baseBeatmap.HitObjects[0].StartTime) - breakLength) / 1000;
@@ -92,10 +68,13 @@ namespace osu.Game.Rulesets.Osu.Difficulty
                 case SliderHeadCircle:
                 case SliderTailCircle:
                 case SliderRepeat:
+                case HoldHeadCircle:
+                case HoldTick holdTick when holdTick.IsLastTick:
                     scoreIncrease = 30;
                     break;
 
                 case SliderTick:
+                case HoldTick:
                     scoreIncrease = 10;
                     break;
 
@@ -119,6 +98,7 @@ namespace osu.Game.Rulesets.Osu.Difficulty
                     break;
 
                 case Slider:
+                case Hold:
                     foreach (var nested in hitObject.NestedHitObjects)
                         simulateHit(nested, ref attributes);
 
