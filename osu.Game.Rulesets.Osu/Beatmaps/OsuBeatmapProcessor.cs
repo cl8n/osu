@@ -194,9 +194,9 @@ namespace osu.Game.Rulesets.Osu.Beatmaps
                         }
                     }
                 }
-                else if (objectI is Slider)
+                else if (objectI is Slider or Hold) // TODO check correctness
                 {
-                    /* We have hit the first slider in a possible stack.
+                    /* We have hit the first slider or hold in a possible stack.
                      * From this point on, we ALWAYS stack positive regardless.
                      */
                     while (--n >= startIndex)
