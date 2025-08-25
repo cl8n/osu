@@ -16,9 +16,11 @@ using osu.Game.Rulesets.Objects.Drawables;
 using osu.Game.Rulesets.Objects.Legacy;
 using osu.Game.Rulesets.Osu.Beatmaps;
 using osu.Game.Rulesets.Osu.Configuration;
+using osu.Game.Rulesets.Osu.Judgements;
 using osu.Game.Rulesets.Osu.Objects;
 using osu.Game.Rulesets.Osu.Objects.Drawables;
 using osu.Game.Rulesets.Osu.Objects.Drawables.Connections;
+using osu.Game.Rulesets.Osu.Scoring;
 using osu.Game.Rulesets.Osu.UI.Cursor;
 using osu.Game.Rulesets.Scoring;
 using osu.Game.Rulesets.UI;
@@ -51,6 +53,8 @@ namespace osu.Game.Rulesets.Osu.UI
         public override Quad SkinnableComponentScreenSpaceDrawQuad => playfieldBorder.ScreenSpaceDrawQuad;
 
         private readonly Container judgementAboveHitObjectLayer;
+
+        private readonly ComboResultProcessor comboResultProcessor = new ComboResultProcessor();
 
         public OsuPlayfield()
         {
@@ -88,6 +92,7 @@ namespace osu.Game.Rulesets.Osu.UI
             }, onJudgementLoaded));
 
             NewResult += onNewResult;
+            RevertResult += r => comboResultProcessor.RevertResult((OsuJudgementResult)r);
         }
 
         private IHitPolicy hitPolicy;
@@ -190,6 +195,8 @@ namespace osu.Game.Rulesets.Osu.UI
         {
             // Hitobjects that block future hits should miss previous hitobjects if they're hit out-of-order.
             hitPolicy.HandleHit(judgedObject);
+
+            comboResultProcessor.ApplyResult((OsuJudgementResult)result);
 
             if (!judgedObject.DisplayResult || !DisplayJudgements.Value)
                 return;

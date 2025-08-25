@@ -8,7 +8,15 @@ namespace osu.Game.Rulesets.Osu.Judgements
 {
     public class OsuJudgementResult : JudgementResult
     {
-        public ComboResult ComboType;
+        /// <summary>
+        /// The result of the combo so far prior to this <see cref="OsuJudgementResult"/> occurring.
+        /// </summary>
+        public ComboResult ComboResultAtJudgement;
+
+        /// <summary>
+        /// The result of the combo so far after this <see cref="OsuJudgementResult"/> occurred.
+        /// </summary>
+        public ComboResult ComboResultAfterJudgement;
 
         public OsuJudgementResult(HitObject hitObject, Judgement judgement)
             : base(hitObject, judgement)
