@@ -120,6 +120,18 @@ namespace osu.Game.Rulesets.Osu.Skinning.Legacy
                 case SkinComponentLookup<HitResult> resultComponent:
                     switch (resultComponent.Component)
                     {
+                        case HitResult.Great:
+                            if (this.GetAnimation("hit300", true, false) != null)
+                                return new LegacyComboResultAwareJudgementPiece(this, HitResult.Great);
+
+                            break;
+
+                        case HitResult.Ok:
+                            if (this.GetAnimation("hit100", true, false) != null)
+                                return new LegacyComboResultAwareJudgementPiece(this, HitResult.Ok);
+
+                            break;
+
                         case HitResult.LargeTickHit:
                         case HitResult.SliderTailHit:
                             if (getSliderPointTexture(resultComponent.Component) is Texture texture)

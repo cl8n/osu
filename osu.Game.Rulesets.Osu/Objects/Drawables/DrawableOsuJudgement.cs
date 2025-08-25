@@ -6,6 +6,7 @@ using osu.Framework.Graphics;
 using osu.Game.Configuration;
 using osu.Game.Rulesets.Judgements;
 using osu.Game.Rulesets.Objects.Drawables;
+using osu.Game.Rulesets.Osu.Skinning.Legacy;
 using osu.Game.Rulesets.Scoring;
 using osuTK;
 using osuTK.Graphics;
@@ -39,6 +40,9 @@ namespace osu.Game.Rulesets.Osu.Objects.Drawables
         public override void Apply(JudgementResult result, DrawableHitObject? judgedObject)
         {
             base.Apply(result, judgedObject);
+
+            if (JudgementBody?.Drawable is LegacyComboResultAwareJudgementPiece comboResultAware)
+                comboResultAware.ApplyJudgementResult(result);
 
             if (judgedObject is not DrawableOsuHitObject osuObject)
                 return;
