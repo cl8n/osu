@@ -4,16 +4,27 @@
 using osu.Game.Beatmaps;
 using osu.Game.Beatmaps.ControlPoints;
 using osu.Game.Rulesets.Judgements;
+using osu.Game.Rulesets.Objects;
+using osu.Game.Rulesets.Objects.Types;
 using osu.Game.Rulesets.Osu.Judgements;
 using osu.Game.Rulesets.Scoring;
 
 namespace osu.Game.Rulesets.Osu.Objects
 {
-    public class SliderTick : OsuHitObject
+    public class SliderTick : OsuHitObject, IHasParent
     {
+        private readonly Slider slider;
+
+        HitObject IHasParent.Parent => slider;
+
         public int SpanIndex { get; set; }
         public double SpanStartTime { get; set; }
         public double PathProgress { get; set; }
+
+        public SliderTick(Slider slider)
+        {
+            this.slider = slider;
+        }
 
         protected override void ApplyDefaultsToSelf(ControlPointInfo controlPointInfo, IBeatmapDifficultyInfo difficulty)
         {

@@ -198,7 +198,7 @@ namespace osu.Game.Rulesets.Osu.Objects
                 switch (e.Type)
                 {
                     case SliderEventType.Tick:
-                        AddNested(new SliderTick
+                        AddNested(new SliderTick(this)
                         {
                             SpanIndex = e.SpanIndex,
                             SpanStartTime = e.SpanStartTime,
@@ -210,7 +210,7 @@ namespace osu.Game.Rulesets.Osu.Objects
                         break;
 
                     case SliderEventType.Head:
-                        AddNested(HeadCircle = new SliderHeadCircle
+                        AddNested(HeadCircle = new SliderHeadCircle(this)
                         {
                             StartTime = e.Time,
                             Position = Position,

@@ -4,6 +4,8 @@
 using osu.Game.Beatmaps;
 using osu.Game.Beatmaps.ControlPoints;
 using osu.Game.Rulesets.Judgements;
+using osu.Game.Rulesets.Objects;
+using osu.Game.Rulesets.Objects.Types;
 using osu.Game.Rulesets.Osu.Judgements;
 using osu.Game.Rulesets.Scoring;
 
@@ -12,9 +14,11 @@ namespace osu.Game.Rulesets.Osu.Objects
     /// <summary>
     /// A hit circle which is at the end of a slider path (either repeat or final tail).
     /// </summary>
-    public abstract class SliderEndCircle : HitCircle
+    public abstract class SliderEndCircle : HitCircle, IHasParent
     {
         protected readonly Slider Slider;
+
+        HitObject IHasParent.Parent => Slider;
 
         protected SliderEndCircle(Slider slider)
         {
