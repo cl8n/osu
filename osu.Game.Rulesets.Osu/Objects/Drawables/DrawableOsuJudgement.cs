@@ -90,6 +90,8 @@ namespace osu.Game.Rulesets.Osu.Objects.Drawables
                 LifetimeEnd = Lighting.LatestTransformEndTime;
             }
 
+            LifetimeEnd = Time.Current + 1400;
+
             base.ApplyHitAnimations();
         }
 
