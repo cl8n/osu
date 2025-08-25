@@ -61,16 +61,17 @@ namespace osu.Game.Rulesets.Osu.Skinning.Legacy
                     ? new LegacyJudgementPieceNew(hitResult, createMainDrawable!, particle)
                     : new LegacyJudgementPieceOld(hitResult, createMainDrawable!);
 
-                AddInternal(innerPiece.With(p => p.Anchor = Anchor.Centre));
+                AddInternal(innerPiece.With(p =>
+                {
+                    p.Alpha = 0;
+                    p.Anchor = Anchor.Centre;
+                }));
                 return innerPiece;
             }
         }
 
         public void ApplyJudgementResult(JudgementResult result)
         {
-            foreach (var child in InternalChildren)
-                child.Alpha = 0;
-
             HitObject rootHitObject = result.HitObject;
 
             while (rootHitObject is IHasParent hasParent)
@@ -104,7 +105,14 @@ namespace osu.Game.Rulesets.Osu.Skinning.Legacy
                 currentPiece = piece;
         }
 
-        public void PlayAnimation() => (currentPiece as IAnimatableJudgement)?.PlayAnimation();
+        public void PlayAnimation()
+        {
+            ((IAnimatableJudgement)currentPiece).PlayAnimation();
+
+            // Propagate transform end time up so that DrawableJudgement extends its lifetime correctly
+            using (BeginAbsoluteSequence(currentPiece.LatestTransformEndTime))
+                this.FadeOut();
+        }
 
         public Drawable? GetAboveHitObjectsProxiedContent() => new Container
         {
