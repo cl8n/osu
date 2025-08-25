@@ -16,9 +16,9 @@ namespace osu.Game.Rulesets.Osu.Tests
         [
             // hitobject, starting HP, fail expected after miss
             [new HitCircle(), 0.01, true],
-            [new SliderHeadCircle(), 0.01, true],
-            [new SliderHeadCircle { ClassicSliderBehaviour = true }, 0.01, true],
-            [new SliderTick(), 0.01, true],
+            [new SliderHeadCircle(new Slider()), 0.01, true],
+            [new SliderHeadCircle(new Slider()) { ClassicSliderBehaviour = true }, 0.01, true],
+            [new SliderTick(new Slider()), 0.01, true],
             [new SliderRepeat(new Slider()), 0.01, true],
             [new SliderTailCircle(new Slider()), 0, true],
             [new SliderTailCircle(new Slider()) { ClassicSliderBehaviour = true }, 0.01, true],

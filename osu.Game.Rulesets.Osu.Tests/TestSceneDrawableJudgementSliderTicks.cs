@@ -115,8 +115,8 @@ namespace osu.Game.Rulesets.Osu.Tests
 
                 var drawableHitObjects = new DrawableOsuHitObject[]
                 {
-                    new DrawableSliderHead(new SliderHeadCircle { StartTime = Time.Current, ClassicSliderBehaviour = classic }),
-                    new DrawableSliderTick(new SliderTick { StartTime = Time.Current }),
+                    new DrawableSliderHead(new SliderHeadCircle(slider) { StartTime = Time.Current, ClassicSliderBehaviour = classic }),
+                    new DrawableSliderTick(new SliderTick(slider) { StartTime = Time.Current }),
                     new DrawableSliderRepeat(new SliderRepeat(slider) { StartTime = Time.Current }),
                     new DrawableSliderTail(new SliderTailCircle(slider) { StartTime = Time.Current, ClassicSliderBehaviour = classic }),
                     new DrawableSlider(slider),
