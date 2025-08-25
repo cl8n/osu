@@ -122,13 +122,13 @@ namespace osu.Game.Rulesets.Osu.Skinning.Legacy
                     {
                         case HitResult.Great:
                             if (this.GetAnimation("hit300", true, false) != null)
-                                return new LegacyComboResultAwareJudgementPiece(this, HitResult.Great);
+                                return new LegacyJudgementPieceComboResultHit(this, HitResult.Great);
 
                             break;
 
                         case HitResult.Ok:
                             if (this.GetAnimation("hit100", true, false) != null)
-                                return new LegacyComboResultAwareJudgementPiece(this, HitResult.Ok);
+                                return new LegacyJudgementPieceComboResultHit(this, HitResult.Ok);
 
                             break;
 

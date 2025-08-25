@@ -15,7 +15,7 @@ using osu.Game.Skinning;
 
 namespace osu.Game.Rulesets.Osu.Skinning.Legacy
 {
-    public partial class LegacyComboResultAwareJudgementPiece : CompositeDrawable, IAnimatableJudgement
+    public partial class LegacyJudgementPieceComboResultHit : CompositeDrawable, IAnimatableJudgement
     {
         private readonly Drawable? piece;
         private readonly Drawable? pieceGoodCombo;
@@ -23,7 +23,7 @@ namespace osu.Game.Rulesets.Osu.Skinning.Legacy
 
         private Drawable? currentPiece;
 
-        public LegacyComboResultAwareJudgementPiece(ISkin skin, HitResult hitResult)
+        public LegacyJudgementPieceComboResultHit(ISkin skin, HitResult hitResult)
         {
             AutoSizeAxes = Axes.Both;
             Origin = Anchor.Centre;

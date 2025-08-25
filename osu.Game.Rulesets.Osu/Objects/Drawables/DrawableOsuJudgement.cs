@@ -41,7 +41,7 @@ namespace osu.Game.Rulesets.Osu.Objects.Drawables
         {
             base.Apply(result, judgedObject);
 
-            if (JudgementBody?.Drawable is LegacyComboResultAwareJudgementPiece comboResultAware)
+            if (JudgementBody?.Drawable is LegacyJudgementPieceComboResultHit comboResultAware)
                 comboResultAware.ApplyJudgementResult(result);
 
             if (judgedObject is not DrawableOsuHitObject osuObject)
