@@ -1,6 +1,7 @@
 // Copyright (c) ppy Pty Ltd <contact@ppy.sh>. Licensed under the MIT Licence.
 // See the LICENCE file in the repository root for full licence text.
 
+using System;
 using System.Linq;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
@@ -17,11 +18,11 @@ namespace osu.Game.Rulesets.Osu.Skinning.Legacy
 {
     public partial class LegacyJudgementPieceComboResultHit : CompositeDrawable, IAnimatableJudgement
     {
-        private readonly Drawable? piece;
+        private readonly Drawable piece;
         private readonly Drawable? pieceGoodCombo;
         private readonly Drawable? piecePerfectCombo;
 
-        private Drawable? currentPiece;
+        private Drawable currentPiece;
 
         public LegacyJudgementPieceComboResultHit(ISkin skin, HitResult hitResult)
         {
@@ -35,7 +36,7 @@ namespace osu.Game.Rulesets.Osu.Skinning.Legacy
                 case HitResult.Great:
                     particle = skin.GetTexture("particle300");
 
-                    piece = createJudgementPiece("hit300");
+                    piece = createJudgementPiece("hit300")!;
                     pieceGoodCombo = createJudgementPiece("hit300k");
                     piecePerfectCombo = createJudgementPiece("hit300g");
 
@@ -44,11 +45,16 @@ namespace osu.Game.Rulesets.Osu.Skinning.Legacy
                 case HitResult.Ok:
                     particle = skin.GetTexture("particle100");
 
-                    piece = createJudgementPiece("hit100");
+                    piece = createJudgementPiece("hit100")!;
                     pieceGoodCombo = createJudgementPiece("hit100k");
 
                     break;
+
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(hitResult));
             }
+
+            currentPiece = piece ?? throw new InvalidOperationException("Base judgement piece cannot be null");
 
             Drawable? createJudgementPiece(string componentName)
             {
